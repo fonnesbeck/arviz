@@ -1,0 +1,6 @@
+arviz.effective\_sample\_size
+=============================
+
+.. currentmodule:: arviz
+
+.. autofunction:: effective_sample_size

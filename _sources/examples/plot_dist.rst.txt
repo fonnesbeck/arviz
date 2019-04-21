@@ -1,0 +1,15 @@
+
+.. _plot_dist:
+
+
+Dist Plot
+=========
+
+
+
+.. image:: _images/plot_dist.png
+
+**Python source code:** :download:`[download source: plot_dist.py]<plot_dist.py>`
+
+.. literalinclude:: plot_dist.py
+    :lines: 7-

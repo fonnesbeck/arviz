@@ -1,0 +1,6 @@
+arviz.plot\_hpd
+===============
+
+.. currentmodule:: arviz
+
+.. autofunction:: plot_hpd

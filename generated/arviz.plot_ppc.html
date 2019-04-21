@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>arviz.plot_ppc &#8212; ArviZ 0.3.3 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="arviz.plot_rank" href="arviz.plot_rank.html" />
+    <link rel="prev" title="arviz.plot_posterior" href="arviz.plot_posterior.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>0.3.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../notebooks/Introduction.html">Quickstart</a></li>
+                <li><a href="../notebooks/InferenceDataCookbook.html">Cookbook</a></li>
+                <li><a href="../notebooks/XarrayforArviZ.html">InferenceData</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../usage.html">Usage</a></li>
+                <li><a href="../about.html">About</a></li>
+            
+            
+              
+              
+            
+            
+            
+                <a class="icon" href="https://github.com/arviz-devs/arviz">
+                    <img src="../_static/GitHub-Mark-32px.png"
+                    style="position: absolute; top: 15px; right: 30px; border: 0;"></a>
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="arviz-plot-ppc">
+<h1>arviz.plot_ppc<a class="headerlink" href="#arviz-plot-ppc" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="arviz.plot_ppc">
+<code class="descclassname">arviz.</code><code class="descname">plot_ppc</code><span class="sig-paren">(</span><em>data</em>, <em>kind='density'</em>, <em>alpha=None</em>, <em>mean=True</em>, <em>figsize=None</em>, <em>textsize=None</em>, <em>data_pairs=None</em>, <em>var_names=None</em>, <em>coords=None</em>, <em>flatten=None</em>, <em>flatten_pp=None</em>, <em>num_pp_samples=None</em>, <em>random_seed=None</em>, <em>jitter=None</em>, <em>animated=False</em>, <em>animation_kwargs=None</em>, <em>legend=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/arviz/plots/ppcplot.html#plot_ppc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arviz.plot_ppc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot for posterior predictive checks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">az.InferenceData object</span></dt><dd><p>InferenceData object containing the observed and posterior
+predictive data.</p>
+</dd>
+<dt><strong>kind</strong><span class="classifier">str</span></dt><dd><p>Type of plot to display (density, cumulative, or scatter). Defaults to density.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Opacity of posterior predictive density curves. Defaults to 0.2 for kind = density
+and cumulative, for scatter defaults to 0.7</p>
+</dd>
+<dt><strong>mean</strong><span class="classifier">bool</span></dt><dd><p>Whether or not to plot the mean posterior predictive distribution. Defaults to True</p>
+</dd>
+<dt><strong>figsize</strong><span class="classifier">tuple</span></dt><dd><p>Figure size. If None it will be defined automatically.</p>
+</dd>
+<dt><strong>textsize: float</strong></dt><dd><p>Text size scaling factor for labels, titles and lines. If None it will be
+autoscaled based on figsize.</p>
+</dd>
+<dt><strong>data_pairs</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing relations between observed data and posterior predictive data.
+Dictionary structure:
+Key = data var_name
+Value = posterior predictive var_name
+For example, <cite>data_pairs = {‘y’ : ‘y_hat’}</cite>
+If None, it will assume that the observed data and the posterior
+predictive data have the same variable name.</p>
+</dd>
+<dt><strong>var_names</strong><span class="classifier">list</span></dt><dd><p>List of variables to be plotted. Defaults to all observed variables in the
+model if None.</p>
+</dd>
+<dt><strong>coords</strong><span class="classifier">dict</span></dt><dd><p>Dictionary mapping dimensions to selected coordinates to be plotted.
+Dimensions without a mapping specified will include all coordinates for
+that dimension. Defaults to including all coordinates for all
+dimensions if None.</p>
+</dd>
+<dt><strong>flatten</strong><span class="classifier">list</span></dt><dd><p>List of dimensions to flatten in observed_data. Only flattens across the coordinates
+specified in the coords argument. Defaults to flattening all of the dimensions.</p>
+</dd>
+<dt><strong>flatten_pp</strong><span class="classifier">list</span></dt><dd><p>List of dimensions to flatten in posterior_predictive. Only flattens across the coordinates
+specified in the coords argument. Defaults to flattening all of the dimensions.
+Dimensions should match flatten excluding dimensions for data_pairs parameters.
+If flatten is defined and flatten_pp is None, then <cite>flatten_pp=flatten</cite>.</p>
+</dd>
+<dt><strong>num_pp_samples</strong><span class="classifier">int</span></dt><dd><p>The number of posterior predictive samples to plot. For <cite>kind</cite> = ‘scatter’ and
+<cite>animation = False</cite> if defaults to a maximum of 5 samples and will set jitter to 0.7
+unless defined otherwise. Otherwise it defaults to all provided samples.</p>
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">int</span></dt><dd><p>Random number generator seed passed to numpy.random.seed to allow
+reproducibility of the plot. By default, no seed will be provided
+and the plot will change each call if a random sample is specified
+by <cite>num_pp_samples</cite>.</p>
+</dd>
+<dt><strong>jitter</strong><span class="classifier">float</span></dt><dd><p>If kind is “scatter”, jitter will add random uniform noise to the height
+of the ppc samples and observed data. By default 0.</p>
+</dd>
+<dt><strong>animated</strong><span class="classifier">bool</span></dt><dd><p>Create an animation of one posterior predictive sample per frame. Defaults to False.</p>
+</dd>
+<dt><strong>animation_kwargs</strong><span class="classifier">dict</span></dt><dd><p>Keywords passed to <cite>animation.FuncAnimation</cite>.</p>
+</dd>
+<dt><strong>legend</strong><span class="classifier">bool</span></dt><dd><p>Add legend to figure. By default True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>axes</strong><span class="classifier">matplotlib axes</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Plot the observed data KDE overlaid on posterior predictive KDEs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arviz</span> <span class="k">as</span> <span class="nn">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">load_arviz_data</span><span class="p">(</span><span class="s1">&#39;radon&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="../_images/arviz-plot_ppc-1.png" src="../_images/arviz-plot_ppc-1.png" />
+</div>
+<p>Plot the overlay with empirical CDFs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;cumulative&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="../_images/arviz-plot_ppc-2.png" src="../_images/arviz-plot_ppc-2.png" />
+</div>
+<p>Use the coords and flatten parameters to plot selected variable dimensions
+across multiple plots.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;observed_county&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ANOKA&#39;</span><span class="p">,</span> <span class="s1">&#39;BELTRAMI&#39;</span><span class="p">]},</span> <span class="n">flatten</span><span class="o">=</span><span class="p">[])</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="../_images/arviz-plot_ppc-3.png" src="../_images/arviz-plot_ppc-3.png" />
+</div>
+<p>Plot the overlay using a stacked scatter plot that is particularly useful
+when the sample sizes are small.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;scatter&#39;</span><span class="p">,</span> <span class="n">flatten</span><span class="o">=</span><span class="p">[],</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;observed_county&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AITKIN&#39;</span><span class="p">,</span> <span class="s1">&#39;BELTRAMI&#39;</span><span class="p">]})</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="../_images/arviz-plot_ppc-4.png" src="../_images/arviz-plot_ppc-4.png" />
+</div>
+<p>Plot random posterior predictive sub-samples.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="o">.</span><span class="n">plot_ppc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_pp_samples</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<img alt="../_images/arviz-plot_ppc-5.png" src="../_images/arviz-plot_ppc-5.png" />
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/generated/arviz.plot_ppc.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, ArviZ devs.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

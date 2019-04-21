@@ -1,0 +1,15 @@
+
+.. _plot_hpd:
+
+
+Plot HPD
+========
+
+
+
+.. image:: _images/plot_hpd.png
+
+**Python source code:** :download:`[download source: plot_hpd.py]<plot_hpd.py>`
+
+.. literalinclude:: plot_hpd.py
+    :lines: 7-

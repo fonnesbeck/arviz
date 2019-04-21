@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>arviz.compare &#8212; ArviZ 0.3.3 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="arviz.hpd" href="arviz.hpd.html" />
+    <link rel="prev" title="arviz.bfmi" href="arviz.bfmi.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>0.3.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="../notebooks/Introduction.html">Quickstart</a></li>
+                <li><a href="../notebooks/InferenceDataCookbook.html">Cookbook</a></li>
+                <li><a href="../notebooks/XarrayforArviZ.html">InferenceData</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../usage.html">Usage</a></li>
+                <li><a href="../about.html">About</a></li>
+            
+            
+              
+              
+            
+            
+            
+                <a class="icon" href="https://github.com/arviz-devs/arviz">
+                    <img src="../_static/GitHub-Mark-32px.png"
+                    style="position: absolute; top: 15px; right: 30px; border: 0;"></a>
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="arviz-compare">
+<h1>arviz.compare<a class="headerlink" href="#arviz-compare" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="arviz.compare">
+<code class="descclassname">arviz.</code><code class="descname">compare</code><span class="sig-paren">(</span><em>dataset_dict</em>, <em>ic='waic'</em>, <em>method='stacking'</em>, <em>b_samples=1000</em>, <em>alpha=1</em>, <em>seed=None</em>, <em>scale='deviance'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/arviz/stats/stats.html#compare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arviz.compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare models based on WAIC or LOO cross validation.</p>
+<p>WAIC is Widely applicable information criterion, and LOO is leave-one-out
+(LOO) cross-validation. Read more theory here - in a paper by some of the
+leading authorities on model selection - dx.doi.org/10.1111/1467-9868.00353</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>dataset_dict</strong><span class="classifier">dict[str] -&gt; InferenceData</span></dt><dd><p>A dictionary of model names and InferenceData objects</p>
+</dd>
+<dt><strong>ic</strong><span class="classifier">str</span></dt><dd><p>Information Criterion (WAIC or LOO) used to compare models. Default WAIC.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>Method used to estimate the weights for each model. Available options are:</p>
+<ul class="simple">
+<li><p>‘stacking’ : (default) stacking of predictive distributions.</p></li>
+<li><dl class="simple">
+<dt>‘BB-pseudo-BMA’<span class="classifier">pseudo-Bayesian Model averaging using Akaike-type</span></dt><dd><p>weighting. The weights are stabilized using the Bayesian bootstrap</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>‘pseudo-BMA’: pseudo-Bayesian Model averaging using Akaike-type</dt><dd><p>weighting, without Bootstrap stabilization (not recommended)</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>For more information read <a class="reference external" href="https://arxiv.org/abs/1704.02030">https://arxiv.org/abs/1704.02030</a></p>
+</dd>
+<dt><strong>b_samples: int</strong></dt><dd><p>Number of samples taken by the Bayesian bootstrap estimation.
+Only useful when method = ‘BB-pseudo-BMA’.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>The shape parameter in the Dirichlet distribution used for the Bayesian bootstrap. Only
+useful when method = ‘BB-pseudo-BMA’. When alpha=1 (default), the distribution is uniform
+on the simplex. A smaller alpha will keeps the final weights more away from 0 and 1.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int or np.random.RandomState instance</span></dt><dd><p>If int or RandomState, use it for seeding Bayesian bootstrap. Only
+useful when method = ‘BB-pseudo-BMA’. Default None the global
+np.random state is used.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">str</span></dt><dd><p>Output scale for IC. Available options are:</p>
+<ul class="simple">
+<li><p><cite>deviance</cite> : (default) -2 * (log-score)</p></li>
+<li><p><cite>log</cite> : 1 * log-score (after Vehtari et al. (2017))</p></li>
+<li><p><cite>negative_log</cite> : -1 * (log-score)</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>A DataFrame, ordered from lowest to highest IC. The index reflects the order in which the</strong></dt><dd></dd>
+<dt><strong>models are passed to this function. The columns are:</strong></dt><dd></dd>
+<dt><strong>IC</strong><span class="classifier">Information Criteria (WAIC or LOO).</span></dt><dd><p>Smaller IC indicates higher out-of-sample predictive fit (“better” model). Default WAIC.
+If <cite>scale == log</cite> higher IC indicates higher out-of-sample predictive fit (“better” model).</p>
+</dd>
+<dt><strong>pIC</strong><span class="classifier">Estimated effective number of parameters.</span></dt><dd></dd>
+<dt><strong>dIC</strong><span class="classifier">Relative difference between each IC (WAIC or LOO)</span></dt><dd></dd>
+<dt><strong>and the lowest IC (WAIC or LOO).</strong></dt><dd><p>It’s always 0 for the top-ranked model.</p>
+</dd>
+<dt><strong>weight: Relative weight for each model.</strong></dt><dd><p>This can be loosely interpreted as the probability of each model (among the compared model)
+given the data. By default the uncertainty in the weights estimation is considered using
+Bayesian bootstrap.</p>
+</dd>
+<dt><strong>SE</strong><span class="classifier">Standard error of the IC estimate.</span></dt><dd><p>If method = BB-pseudo-BMA these values are estimated using Bayesian bootstrap.</p>
+</dd>
+<dt><strong>dSE</strong><span class="classifier">Standard error of the difference in IC between each model and</span></dt><dd></dd>
+<dt><strong>the top-ranked model.</strong></dt><dd><p>It’s always 0 for the top-ranked model.</p>
+</dd>
+<dt><strong>warning</strong><span class="classifier">A value of 1 indicates that the computation of the IC may not be reliable. This could</span></dt><dd><p>be indication of WAIC/LOO starting to fail see <a class="reference external" href="http://arxiv.org/abs/1507.04544">http://arxiv.org/abs/1507.04544</a> for details.</p>
+</dd>
+<dt><strong>scale</strong><span class="classifier">Scale used for the IC.</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/generated/arviz.compare.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, ArviZ devs.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

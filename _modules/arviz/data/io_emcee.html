@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>arviz.data.io_emcee &#8212; ArviZ 0.3.3 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html"><span><img src="../../../_static/logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>0.3.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../examples/index.html">Gallery</a></li>
+                <li><a href="../../../notebooks/Introduction.html">Quickstart</a></li>
+                <li><a href="../../../notebooks/InferenceDataCookbook.html">Cookbook</a></li>
+                <li><a href="../../../notebooks/XarrayforArviZ.html">InferenceData</a></li>
+                <li><a href="../../../api.html">API</a></li>
+                <li><a href="../../../usage.html">Usage</a></li>
+                <li><a href="../../../about.html">About</a></li>
+            
+            
+              
+              
+            
+            
+            
+                <a class="icon" href="https://github.com/arviz-devs/arviz">
+                    <img src="../../../_static/GitHub-Mark-32px.png"
+                    style="position: absolute; top: 15px; right: 30px; border: 0;"></a>
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for arviz.data.io_emcee</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;emcee-specific conversion code.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">.inference_data</span> <span class="k">import</span> <span class="n">InferenceData</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">dict_to_dataset</span>
+
+
+<span class="k">def</span> <span class="nf">_verify_names</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span> <span class="n">var_names</span><span class="p">,</span> <span class="n">arg_names</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make sure var_names and arg_names are assigned reasonably.</span>
+
+<span class="sd">    This is meant to run before loading emcee objects into InferenceData.</span>
+<span class="sd">    In case var_names or arg_names is None, will provide defaults. If they are</span>
+<span class="sd">    not None, it verifies there are the right number of them.</span>
+
+<span class="sd">    Throws a ValueError in case validation fails.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sampler : emcee.EnsembleSampler</span>
+<span class="sd">        Fitted emcee sampler</span>
+<span class="sd">    var_names : list[str] or None</span>
+<span class="sd">        Names for the emcee parameters</span>
+<span class="sd">    arg_names : list[str] or None</span>
+<span class="sd">        Names for the args/observations provided to emcee</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[str], list[str]</span>
+<span class="sd">        Defaults for var_names and arg_names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># There are 3 possible cases: emcee2, emcee3 and sampler read from h5 file (emcee3 only)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">):</span>
+        <span class="n">num_vars</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">num_args</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sampler</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span> <span class="s2">&quot;log_prob_fn&quot;</span><span class="p">):</span>
+        <span class="n">num_vars</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">get_chain</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">num_args</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sampler</span><span class="o">.</span><span class="n">log_prob_fn</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">num_vars</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">get_chain</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">num_args</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># emcee only stores the posterior samples</span>
+
+    <span class="k">if</span> <span class="n">var_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">var_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;var_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_vars</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">arg_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">arg_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;arg_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_args</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var_names</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_vars</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The sampler has </span><span class="si">{}</span><span class="s2"> variables, but only </span><span class="si">{}</span><span class="s2"> var_names were provided!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">num_vars</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">var_names</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg_names</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_args</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The sampler has </span><span class="si">{}</span><span class="s2"> args, but only </span><span class="si">{}</span><span class="s2"> arg_names were provided!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">num_args</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg_names</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">var_names</span><span class="p">,</span> <span class="n">arg_names</span>
+
+
+<span class="k">class</span> <span class="nc">EmceeConverter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Encapsulate emcee specific logic.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arg_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">var_names</span><span class="p">,</span> <span class="n">arg_names</span> <span class="o">=</span> <span class="n">_verify_names</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span> <span class="n">var_names</span><span class="p">,</span> <span class="n">arg_names</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span> <span class="o">=</span> <span class="n">sampler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_names</span> <span class="o">=</span> <span class="n">var_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arg_names</span> <span class="o">=</span> <span class="n">arg_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="o">=</span> <span class="n">coords</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">dims</span>
+        <span class="kn">import</span> <span class="nn">emcee</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">emcee</span> <span class="o">=</span> <span class="n">emcee</span>
+
+    <span class="k">def</span> <span class="nf">posterior_to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert the posterior to an xarray dataset.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var_names</span><span class="p">):</span>
+            <span class="c1"># Use emcee3 syntax, else use emcee2</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">get_chain</span><span class="p">()[(</span><span class="o">...</span><span class="p">,</span> <span class="n">idx</span><span class="p">)]</span><span class="o">.</span><span class="n">T</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">,</span> <span class="s2">&quot;get_chain&quot;</span><span class="p">)</span>
+                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">chain</span><span class="p">[(</span><span class="o">...</span><span class="p">,</span> <span class="n">idx</span><span class="p">)]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dict_to_dataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emcee</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">observed_data_to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert observed data to xarray.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg_names</span><span class="p">):</span>
+            <span class="c1"># Use emcee3 syntax, else use emcee2</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">log_prob_fn</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">,</span> <span class="s2">&quot;log_prob_fn&quot;</span><span class="p">)</span>
+                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dict_to_dataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emcee</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_inference_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert all available data to an InferenceData object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">InferenceData</span><span class="p">(</span>
+            <span class="o">**</span><span class="p">{</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">posterior_to_xarray</span><span class="p">(),</span>
+                <span class="s2">&quot;observed_data&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">observed_data_to_xarray</span><span class="p">(),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="from_emcee"><a class="viewcode-back" href="../../../generated/arviz.from_emcee.html#arviz.from_emcee">[docs]</a><span class="k">def</span> <span class="nf">from_emcee</span><span class="p">(</span><span class="n">sampler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arg_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert emcee data into an InferenceData object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sampler : emcee.EnsembleSampler</span>
+<span class="sd">        Fitted sampler from emcee.</span>
+<span class="sd">    var_names : list[str] (Optional)</span>
+<span class="sd">        A list of names for variables in the sampler</span>
+<span class="sd">    arg_names : list[str] (Optional)</span>
+<span class="sd">        A list of names for args in the sampler</span>
+<span class="sd">    coords : dict[str] -&gt; list[str]</span>
+<span class="sd">        Map of dimensions to coordinates</span>
+<span class="sd">    dims : dict[str] -&gt; list[str]</span>
+<span class="sd">        Map variable names to their coordinates</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    InferenceData</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Passing an ``emcee.EnsembleSampler`` object to ``az.from_emcee`` converts it</span>
+<span class="sd">    to an InferenceData object. Start defining the model and running the sampler:</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+<span class="sd">        &gt;&gt;&gt; import emcee</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import arviz as az</span>
+<span class="sd">        &gt;&gt;&gt; J = 8</span>
+<span class="sd">        &gt;&gt;&gt; y_obs = np.array([28.0, 8.0, -3.0, 7.0, -1.0, 1.0, 18.0, 12.0])</span>
+<span class="sd">        &gt;&gt;&gt; sigma = np.array([15.0, 10.0, 16.0, 11.0, 9.0, 11.0, 10.0, 18.0])</span>
+<span class="sd">        &gt;&gt;&gt; def log_prior_8school(theta):</span>
+<span class="sd">        &gt;&gt;&gt;     mu, tau, eta = theta[0], theta[1], theta[2:]</span>
+<span class="sd">        &gt;&gt;&gt;     # Half-cauchy prior, hwhm=25</span>
+<span class="sd">        &gt;&gt;&gt;     if tau &lt; 0:</span>
+<span class="sd">        &gt;&gt;&gt;         return -np.inf</span>
+<span class="sd">        &gt;&gt;&gt;     prior_tau = -np.log(tau ** 2 + 25 ** 2)</span>
+<span class="sd">        &gt;&gt;&gt;     prior_mu = -(mu / 10) ** 2  # normal prior, loc=0, scale=10</span>
+<span class="sd">        &gt;&gt;&gt;     prior_eta = -np.sum(eta ** 2)  # normal prior, loc=0, scale=1</span>
+<span class="sd">        &gt;&gt;&gt;     return prior_mu + prior_tau + prior_eta</span>
+<span class="sd">        &gt;&gt;&gt; def log_likelihood_8school(theta, y, s):</span>
+<span class="sd">        &gt;&gt;&gt;     mu, tau, eta = theta[0], theta[1], theta[2:]</span>
+<span class="sd">        &gt;&gt;&gt;     return -((mu + tau * eta - y) / s) ** 2</span>
+<span class="sd">        &gt;&gt;&gt; def lnprob_8school(theta, y, s):</span>
+<span class="sd">        &gt;&gt;&gt;     prior = log_prior_8school(theta)</span>
+<span class="sd">        &gt;&gt;&gt;     like_vect = log_likelihood_8school(theta, y, s)</span>
+<span class="sd">        &gt;&gt;&gt;     like = np.sum(like_vect)</span>
+<span class="sd">        &gt;&gt;&gt;     return like + prior</span>
+<span class="sd">        &gt;&gt;&gt; nwalkers, draws = 50, 7000</span>
+<span class="sd">        &gt;&gt;&gt; ndim = J + 2</span>
+<span class="sd">        &gt;&gt;&gt; pos = np.random.normal(size=(nwalkers, ndim))</span>
+<span class="sd">        &gt;&gt;&gt; pos[:, 1] = np.absolute(pos[:, 1])</span>
+<span class="sd">        &gt;&gt;&gt; sampler = emcee.EnsembleSampler(</span>
+<span class="sd">        &gt;&gt;&gt;     nwalkers,</span>
+<span class="sd">        &gt;&gt;&gt;     ndim,</span>
+<span class="sd">        &gt;&gt;&gt;     lnprob_8school,</span>
+<span class="sd">        &gt;&gt;&gt;     args=(y_obs, sigma)</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
+<span class="sd">        &gt;&gt;&gt; sampler.run_mcmc(pos, draws);</span>
+
+<span class="sd">    And convert the sampler to an InferenceData object. As emcee does not store variable</span>
+<span class="sd">    names, they must be passed to the converter in order to have them:</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+<span class="sd">        &gt;&gt;&gt; var_names = [&#39;mu&#39;, &#39;tau&#39;]+[&#39;eta{}&#39;.format(i) for i in range(J)]</span>
+<span class="sd">        &gt;&gt;&gt; emcee_data = az.from_emcee(sampler, var_names=var_names)</span>
+
+<span class="sd">    From an InferenceData object, ArviZ&#39;s native data structure, the posterior plot</span>
+<span class="sd">    of the first 3 variables can be done in one line:</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+<span class="sd">        &gt;&gt;&gt; az.plot_posterior(emcee_data, var_names=var_names[:3])</span>
+
+<span class="sd">    And the trace:</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+<span class="sd">        &gt;&gt;&gt; az.plot_trace(emcee_data, var_names=[&#39;mu&#39;])</span>
+
+<span class="sd">    Emcee is an Affine Invariant MCMC Ensemble Sampler, thus, its chains are **not**</span>
+<span class="sd">    independent, which means that many ArviZ functions can not be used, at least directly.</span>
+<span class="sd">    However, it is possible to combine emcee and ArviZ and use most of ArviZ</span>
+<span class="sd">    functionalities. The first step is to modify the probability function to use the</span>
+<span class="sd">    ``blobs`` and store the log_likelihood, then rerun the sampler using the new function:</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+
+<span class="sd">        &gt;&gt;&gt; def lnprob_8school_blobs(theta, y, s):</span>
+<span class="sd">        &gt;&gt;&gt;     prior = log_prior_8school(theta)</span>
+<span class="sd">        &gt;&gt;&gt;     like_vect = log_likelihood_8school(theta, y, s)</span>
+<span class="sd">        &gt;&gt;&gt;     like = np.sum(like_vect)</span>
+<span class="sd">        &gt;&gt;&gt;     return like + prior, like_vect</span>
+<span class="sd">        &gt;&gt;&gt; sampler_blobs = emcee.EnsembleSampler(</span>
+<span class="sd">        &gt;&gt;&gt;     nwalkers,</span>
+<span class="sd">        &gt;&gt;&gt;     ndim,</span>
+<span class="sd">        &gt;&gt;&gt;     lnprob_8school_blobs,</span>
+<span class="sd">        &gt;&gt;&gt;     args=(y_obs, sigma)</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
+<span class="sd">        &gt;&gt;&gt; sampler_blobs.run_mcmc(pos, draws);</span>
+
+<span class="sd">    ArviZ has no support for the ``blobs`` functionality yet, but a workaround can be</span>
+<span class="sd">    created. First make sure that the dimensions are in the order</span>
+<span class="sd">    ``(chain, draw, *shape)``. It may also be a good idea to apply a burn-in period</span>
+<span class="sd">    and to thin the draw dimension (which due to the correlations between chains and</span>
+<span class="sd">    consecutive draws, won&#39;t reduce the effective sample size if the value is small enough).</span>
+<span class="sd">    Then convert the numpy arrays to InferenceData, in this case using ``az.from_dict``:</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+<span class="sd">        &gt;&gt;&gt; burnin, thin = 500, 10</span>
+<span class="sd">        &gt;&gt;&gt; blobs = np.swapaxes(np.array(sampler_blobs.blobs), 0, 1)[:, burnin::thin, :]</span>
+<span class="sd">        &gt;&gt;&gt; chain = sampler_blobs.chain[:, burnin::thin, :]</span>
+<span class="sd">        &gt;&gt;&gt; posterior_dict = {&quot;mu&quot;: chain[:, :, 0], &quot;tau&quot;: chain[:, :, 1], &quot;eta&quot;: chain[:, :, 2:]}</span>
+<span class="sd">        &gt;&gt;&gt; stats_dict = {&quot;log_likelihood&quot;: blobs}</span>
+<span class="sd">        &gt;&gt;&gt; emcee_data = az.from_dict(</span>
+<span class="sd">        &gt;&gt;&gt;     posterior=posterior_dict,</span>
+<span class="sd">        &gt;&gt;&gt;     sample_stats=stats_dict,</span>
+<span class="sd">        &gt;&gt;&gt;     coords={&quot;school&quot;: range(8)},</span>
+<span class="sd">        &gt;&gt;&gt;     dims={&quot;eta&quot;: [&quot;school&quot;], &quot;log_likelihood&quot;: [&quot;school&quot;]}</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
+
+<span class="sd">    To calculate the effective sample size emcee&#39;s functions must be used. There are</span>
+<span class="sd">    many changes in emcee&#39;s API from version 2 to 3, thus, the calculation is different</span>
+<span class="sd">    depending on the version. In addition, in version 2, the autocorrelation time raises</span>
+<span class="sd">    an error if the chain is not long enough.</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+<span class="sd">        &gt;&gt;&gt; if emcee.__version__[0] == &#39;3&#39;:</span>
+<span class="sd">        &gt;&gt;&gt;     ess=(draws-burnin)/sampler.get_autocorr_time(quiet=True, discard=burnin, thin=thin)</span>
+<span class="sd">        &gt;&gt;&gt; else:</span>
+<span class="sd">        &gt;&gt;&gt;     # to avoid error while generating the docs, the ess value is hard coded, it</span>
+<span class="sd">        &gt;&gt;&gt;     # should be calculated with:</span>
+<span class="sd">        &gt;&gt;&gt;     # ess = chain.shape[1] / emcee.autocorr.integrated_time(chain)</span>
+<span class="sd">        &gt;&gt;&gt;     ess = (draws-burnin)/30</span>
+<span class="sd">        &gt;&gt;&gt; reff = np.mean(ess) / (nwalkers * chain.shape[1])</span>
+
+<span class="sd">    This value can afterwards be used to estimate the leave-one-out cross-validation using</span>
+<span class="sd">    Pareto smoothed importance sampling with ArviZ and plot the results:</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :context: close-figs</span>
+
+<span class="sd">        &gt;&gt;&gt; loo_stats = az.loo(emcee_data, reff=reff, pointwise=True)</span>
+<span class="sd">        &gt;&gt;&gt; az.plot_khat(loo_stats.pareto_k)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">EmceeConverter</span><span class="p">(</span>
+        <span class="n">sampler</span><span class="o">=</span><span class="n">sampler</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="n">var_names</span><span class="p">,</span> <span class="n">arg_names</span><span class="o">=</span><span class="n">arg_names</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="n">coords</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">dims</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_inference_data</span><span class="p">()</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, ArviZ devs.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

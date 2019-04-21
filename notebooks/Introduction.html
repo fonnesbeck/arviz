@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>ArviZ Quickstart &#8212; ArviZ 0.3.3 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example gallery" href="../examples/index.html" />
+    <link rel="prev" title="ArviZ: Exploratory analysis of Bayesian models" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/logo.png"></span>
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>0.3.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../examples/index.html">Gallery</a></li>
+                <li><a href="#">Quickstart</a></li>
+                <li><a href="InferenceDataCookbook.html">Cookbook</a></li>
+                <li><a href="XarrayforArviZ.html">InferenceData</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../usage.html">Usage</a></li>
+                <li><a href="../about.html">About</a></li>
+            
+            
+              
+              
+            
+            
+            
+                <a class="icon" href="https://github.com/arviz-devs/arviz">
+                    <img src="../_static/GitHub-Mark-32px.png"
+                    style="position: absolute; top: 15px; right: 30px; border: 0;"></a>
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 7ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="ArviZ-Quickstart">
+<h1>ArviZ Quickstart<a class="headerlink" href="#ArviZ-Quickstart" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">arviz</span> <span class="kn">as</span> <span class="nn">az</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># ArviZ ships with style sheets!</span>
+<span class="n">az</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;arviz-darkgrid&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Get-started-with-plotting">
+<h2>Get started with plotting<a class="headerlink" href="#Get-started-with-plotting" title="Permalink to this headline">¶</a></h2>
+<p>ArviZ is designed to be used with libraries like <a class="reference external" href="https://pystan.readthedocs.io">PyStan</a> and <a class="reference external" href="https://docs.pymc.io">PyMC3</a>, but works fine with raw numpy arrays.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_posterior</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="n">_000</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Introduction_3_0.png" src="../_images/notebooks_Introduction_3_0.png" />
+</div>
+</div>
+<p>Plotting a dictionary of arrays, ArviZ will interpret each key as the name of a different random variable. Each row of an array is treated as an independent series of draws from the variable, called a <em>chain</em>. Below, we have 10 chains of 50 draws each for four different distributions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">az</span><span class="o">.</span><span class="n">plot_forest</span><span class="p">({</span>
+    <span class="s1">&#39;normal&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">size</span><span class="p">),</span>
+    <span class="s1">&#39;gumbel&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">gumbel</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span>
+    <span class="s1">&#39;student t&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">standard_t</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span>
+    <span class="s1">&#39;exponential&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Introduction_5_0.png" src="../_images/notebooks_Introduction_5_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Plotting-with-PyMC3-objects">
+<h2>Plotting with PyMC3 objects<a class="headerlink" href="#Plotting-with-PyMC3-objects" title="Permalink to this headline">¶</a></h2>
+<p>ArviZ is designed to work well with high dimensional, labelled data. Consider the <a class="reference external" href="http://andrewgelman.com/2014/01/21/everything-need-know-bayesian-statistics-learned-eight-schools/">eight schools model</a>, which roughly tries to measure the effectiveness of SAT classes at eight different schools. To show off ArviZ’s labelling, I give the schools the names of <a class="reference external" href="https://en.wikipedia.org/wiki/Eight_Schools_Association">a different eight schools</a>.</p>
+<p>This model is small enough to write down, is hierarchical, uses labelling, and a centered parameterization causes <a class="reference external" href="http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html">divergences</a> (which are interesting for illustration):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pymc3</span> <span class="kn">as</span> <span class="nn">pm</span>
+
+<span class="n">J</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">28.</span><span class="p">,</span>  <span class="mf">8.</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.</span><span class="p">,</span>  <span class="mf">7.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span> <span class="mf">18.</span><span class="p">,</span> <span class="mf">12.</span><span class="p">])</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">15.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">16.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="mf">18.</span><span class="p">])</span>
+<span class="n">schools</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;Choate&#39;</span><span class="p">,</span> <span class="s1">&#39;Deerfield&#39;</span><span class="p">,</span> <span class="s1">&#39;Phillips Andover&#39;</span><span class="p">,</span> <span class="s1">&#39;Phillips Exeter&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;Hotchkiss&#39;</span><span class="p">,</span> <span class="s1">&#39;Lawrenceville&#39;</span><span class="p">,</span> <span class="s2">&quot;St. Paul&#39;s&quot;</span><span class="p">,</span> <span class="s1">&#39;Mt. Hermon&#39;</span><span class="p">])</span>
+
+
+<span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">centered_eight</span><span class="p">:</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">HalfCauchy</span><span class="p">(</span><span class="s1">&#39;tau&#39;</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">J</span><span class="p">)</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s1">&#39;obs&#39;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># This pattern is useful in PyMC3</span>
+    <span class="n">prior</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample_prior_predictive</span><span class="p">()</span>
+    <span class="n">centered_eight_trace</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+    <span class="n">posterior_predictive</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">sample_posterior_predictive</span><span class="p">(</span><span class="n">centered_eight_trace</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Auto-assigning NUTS sampler...
+Initializing NUTS using jitter+adapt_diag...
+Multiprocess sampling (4 chains in 4 jobs)
+NUTS: [theta, tau, mu]
+Sampling 4 chains: 100%|██████████| 4000/4000 [00:02&lt;00:00, 1659.82draws/s]
+There were 9 divergences after tuning. Increase `target_accept` or reparameterize.
+The acceptance probability does not match the target. It is 0.679274648861103, but should be close to 0.8. Try to increase the number of tuning steps.
+There were 15 divergences after tuning. Increase `target_accept` or reparameterize.
+The acceptance probability does not match the target. It is 0.6222461372253658, but should be close to 0.8. Try to increase the number of tuning steps.
+There were 32 divergences after tuning. Increase `target_accept` or reparameterize.
+The acceptance probability does not match the target. It is 0.5960725891337998, but should be close to 0.8. Try to increase the number of tuning steps.
+There were 31 divergences after tuning. Increase `target_accept` or reparameterize.
+The acceptance probability does not match the target. It is 0.7091049759437956, but should be close to 0.8. Try to increase the number of tuning steps.
+The estimated number of effective samples is smaller than 200 for some parameters.
+100%|██████████| 2000/2000 [00:00&lt;00:00, 4128.69it/s]
+</pre></div></div>
+</div>
+<p>Most ArviZ functions work fine with <code class="docutils literal notranslate"><span class="pre">trace</span></code> objects from PyMC3:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_autocorr</span><span class="p">(</span><span class="n">centered_eight_trace</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="s1">&#39;tau&#39;</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Introduction_9_0.png" src="../_images/notebooks_Introduction_9_0.png" />
+</div>
+</div>
+<div class="section" id="Convert-to-InferenceData">
+<h3>Convert to InferenceData<a class="headerlink" href="#Convert-to-InferenceData" title="Permalink to this headline">¶</a></h3>
+<p>For much more powerful querying, analysis and plotting, we can use built-in ArviZ utilities to convert PyMC3 objects to xarray datasets. Note we are also giving some information about labelling.</p>
+<p>ArviZ is built to work with <code class="docutils literal notranslate"><span class="pre">InferenceData</span></code>, and the more <em>groups</em> it has access to, the more powerful analyses it can perform. Here is a plot of the trace, which is common in PyMC3 workflows. Note the intelligent labels.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_pymc3</span><span class="p">(</span><span class="n">trace</span><span class="o">=</span><span class="n">centered_eight_trace</span><span class="p">,</span>
+                     <span class="n">prior</span><span class="o">=</span><span class="n">prior</span><span class="p">,</span>
+                     <span class="n">posterior_predictive</span><span class="o">=</span><span class="n">posterior_predictive</span><span class="p">,</span>
+                     <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;school&#39;</span><span class="p">:</span> <span class="n">schools</span><span class="p">},</span>
+                     <span class="n">dims</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;theta&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;school&#39;</span><span class="p">],</span> <span class="s1">&#39;obs&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;school&#39;</span><span class="p">]})</span>
+<span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Inference data with groups:
+    &gt; posterior
+    &gt; sample_stats
+    &gt; posterior_predictive
+    &gt; prior
+    &gt; observed_data
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_trace</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Introduction_12_1.png" src="../_images/notebooks_Introduction_12_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Plotting-with-PyStan-objects">
+<h2>Plotting with PyStan objects<a class="headerlink" href="#Plotting-with-PyStan-objects" title="Permalink to this headline">¶</a></h2>
+<p>ArviZ is built with first class support for PyStan objects, and can plot raw <code class="docutils literal notranslate"><span class="pre">fit</span></code> objects in a reasonable manner. Here is the same centered eight schools model:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pystan</span>
+
+
+<span class="n">schools_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">data {</span>
+<span class="s2">  int&lt;lower=0&gt; J;</span>
+<span class="s2">  real y[J];</span>
+<span class="s2">  real&lt;lower=0&gt; sigma[J];</span>
+<span class="s2">}</span>
+
+<span class="s2">parameters {</span>
+<span class="s2">  real mu;</span>
+<span class="s2">  real&lt;lower=0&gt; tau;</span>
+<span class="s2">  real theta[J];</span>
+<span class="s2">}</span>
+
+<span class="s2">model {</span>
+<span class="s2">  mu ~ normal(0, 5);</span>
+<span class="s2">  tau ~ cauchy(0, 5);</span>
+<span class="s2">  theta ~ normal(mu, tau);</span>
+<span class="s2">  y ~ normal(theta, sigma);</span>
+<span class="s2">}</span>
+<span class="s2">generated quantities {</span>
+<span class="s2">    vector[J] log_lik;</span>
+<span class="s2">    vector[J] y_hat;</span>
+<span class="s2">    for (j in 1:J) {</span>
+<span class="s2">        log_lik[j] = normal_lpdf(y[j] | theta[j], sigma[j]);</span>
+<span class="s2">        y_hat[j] = normal_rng(theta[j], sigma[j]);</span>
+<span class="s2">    }</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">schools_dat</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;J&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+               <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">28</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+               <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">18</span><span class="p">]}</span>
+
+<span class="n">sm</span> <span class="o">=</span> <span class="n">pystan</span><span class="o">.</span><span class="n">StanModel</span><span class="p">(</span><span class="n">model_code</span><span class="o">=</span><span class="n">schools_code</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">schools_dat</span><span class="p">,</span> <span class="nb">iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">chains</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+INFO:pystan:COMPILING THE C++ CODE FOR MODEL anon_model_b0eada194ad938e30ed47926216f98ca NOW.
+/home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/Cython/Compiler/Main.py:367: FutureWarning: Cython directive &#39;language_level&#39; not set, using 2 for now (Py2). This will change in a later release! File: /tmp/tmpwz_kifss/stanfit4anon_model_b0eada194ad938e30ed47926216f98ca_1526190359138879889.pyx
+  tree = Parsing.p_module(s, pxd, full_module_name)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+In file included from /home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/numpy/core/include/numpy/ndarraytypes.h:1821:0,
+                 from /home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/numpy/core/include/numpy/ndarrayobject.h:18,
+                 from /home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/numpy/core/include/numpy/arrayobject.h:4,
+                 from /tmp/tmpwz_kifss/stanfit4anon_model_b0eada194ad938e30ed47926216f98ca_1526190359138879889.cpp:688:
+/home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:15:2: warning: #warning &#34;Using deprecated NumPy API, disable it by &#34; &#34;#defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION&#34; [-Wcpp]
+ #warning &#34;Using deprecated NumPy API, disable it by &#34; \
+  ^
+In file included from /tmp/tmpwz_kifss/stanfit4anon_model_b0eada194ad938e30ed47926216f98ca_1526190359138879889.cpp:692:0:
+/home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/pystan/stan_fit.hpp: In function ‘int pystan::{anonymous}::command(pystan::StanArgs&amp;, Model&amp;, pystan::StanHolder&amp;, const std::vector&lt;long unsigned int&gt;&amp;, const std::vector&lt;std::__cxx11::basic_string&lt;char&gt; &gt;&amp;, RNG_t&amp;)’:
+/home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/pystan/stan_fit.hpp:830:12: warning: ‘template&lt;class&gt; class std::auto_ptr’ is deprecated [-Wdeprecated-declarations]
+       std::auto_ptr&lt;stan::io::var_context&gt; init_context_ptr;
+            ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from /home/tbayes/miniconda3/envs/arviz3.6/lib/python3.6/site-packages/pystan/stan_fit.hpp:5,
+                 from /tmp/tmpwz_kifss/stanfit4anon_model_b0eada194ad938e30ed47926216f98ca_1526190359138879889.cpp:692:
+/usr/include/c++/5/bits/unique_ptr.h:49:28: note: declared here
+   template&lt;typename&gt; class auto_ptr;
+                            ^
+/tmp/tmpwz_kifss/stanfit4anon_model_b0eada194ad938e30ed47926216f98ca_1526190359138879889.cpp: In function ‘PyObject* __pyx_pf_71stanfit4anon_model_b0eada194ad938e30ed47926216f98ca_1526190359138879889_2_call_sampler(PyObject*, PyObject*, PyObject*, PyObject*)’:
+/tmp/tmpwz_kifss/stanfit4anon_model_b0eada194ad938e30ed47926216f98ca_1526190359138879889.cpp:9242:30: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     __pyx_t_12 = ((__pyx_t_9 != __pyx_v_fitptr-&gt;param_names_oi().size()) != 0);
+                              ^
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+WARNING:pystan:Rhat for parameter lp__ is 1.1101320455621984!
+WARNING:pystan:Rhat above 1.1 or below 0.9 indicates that the chains very likely have not mixed
+WARNING:pystan:103 of 2000 iterations ended with a divergence (5.15%).
+WARNING:pystan:Try running with adapt_delta larger than 0.8 to remove the divergences.
+WARNING:pystan:Chain 2: E-BFMI = 0.10311272757204448
+WARNING:pystan:E-BFMI below 0.2 indicates you may need to reparameterize your model
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_density</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="s1">&#39;tau&#39;</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Introduction_15_0.png" src="../_images/notebooks_Introduction_15_0.png" />
+</div>
+</div>
+<p>Again, converting to <code class="docutils literal notranslate"><span class="pre">InferenceData</span></code> (a netcdf datastore that loads data into <code class="docutils literal notranslate"><span class="pre">xarray</span></code> datasets), we can get much richer labelling and mixing of data. Here is a plot showing where the Hamiltonian sampler had divergences</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">from_pystan</span><span class="p">(</span><span class="n">posterior</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span>
+                      <span class="n">posterior_predictive</span><span class="o">=</span><span class="s1">&#39;y_hat&#39;</span><span class="p">,</span>
+                      <span class="n">observed_data</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span>
+                      <span class="n">log_likelihood</span><span class="o">=</span><span class="s1">&#39;log_lik&#39;</span><span class="p">,</span>
+                      <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;school&#39;</span><span class="p">:</span> <span class="n">schools</span><span class="p">},</span>
+                      <span class="n">dims</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;theta&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;school&#39;</span><span class="p">],</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;school&#39;</span><span class="p">],</span> <span class="s1">&#39;log_lik&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;school&#39;</span><span class="p">],</span> <span class="s1">&#39;y_hat&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;school&#39;</span><span class="p">],</span> <span class="s1">&#39;theta_tilde&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;school&#39;</span><span class="p">]})</span>
+<span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Inference data with groups:
+    &gt; posterior
+    &gt; sample_stats
+    &gt; posterior_predictive
+    &gt; observed_data
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">az</span><span class="o">.</span><span class="n">plot_pair</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;school&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Choate&#39;</span><span class="p">,</span> <span class="s1">&#39;Deerfield&#39;</span><span class="p">,</span> <span class="s1">&#39;Phillips Andover&#39;</span><span class="p">]},</span> <span class="n">divergences</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Introduction_18_0.png" src="../_images/notebooks_Introduction_18_0.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/notebooks/Introduction.ipynb.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, ArviZ devs.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

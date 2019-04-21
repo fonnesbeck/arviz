@@ -1,0 +1,15 @@
+
+.. _styles:
+
+
+Styles
+======
+
+
+
+.. image:: _images/styles.png
+
+**Python source code:** :download:`[download source: styles.py]<styles.py>`
+
+.. literalinclude:: styles.py
+    :lines: 7-

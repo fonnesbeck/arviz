@@ -1,0 +1,15 @@
+
+.. _plot_rank:
+
+
+Rank plot
+=========
+
+
+
+.. image:: _images/plot_rank.png
+
+**Python source code:** :download:`[download source: plot_rank.py]<plot_rank.py>`
+
+.. literalinclude:: plot_rank.py
+    :lines: 7-
