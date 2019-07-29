@@ -36,6 +36,7 @@ def plot_forest(
     textsize=None,
     linewidth=None,
     markersize=None,
+    order=None,
     ridgeplot_alpha=None,
     ridgeplot_overlap=2,
     ridgeplot_kind="auto",
@@ -87,6 +88,8 @@ def plot_forest(
         Line width throughout. If None it will be autoscaled based on figsize.
     markersize : int
         Markersize throughout. If None it will be autoscaled based on figsize.
+    order : str
+        Order plot by median value. Accepts 'ascending' or 'descending'. Defaults to None (original order).
     ridgeplot_alpha : float
         Transparency for ridgeplot fill.  If 0, border is colored by model, otherwise
         a black outline is used.
@@ -151,7 +154,7 @@ def plot_forest(
         width_ratios.append(1)
 
     plot_handler = PlotHandler(
-        datasets, var_names=var_names, model_names=model_names, combined=combined, colors=colors
+        datasets, var_names=var_names, model_names=model_names, combined=combined, colors=colors, order=order
     )
 
     if figsize is None:
@@ -236,7 +239,7 @@ class PlotHandler:
 
     # pylint: disable=inconsistent-return-statements
 
-    def __init__(self, datasets, var_names, model_names, combined, colors):
+    def __init__(self, datasets, var_names, model_names, combined, colors, order):
         self.data = datasets
 
         if model_names is None:
@@ -269,6 +272,8 @@ class PlotHandler:
             colors = [colors for _ in self.data]
 
         self.colors = list(reversed(colors))  # y-values are upside down
+
+        self.order = order
 
         self.plotters = self.make_plotters()
 
@@ -383,7 +388,7 @@ class PlotHandler:
             qlist = [endpoint, 25, 50, 75, 100 - endpoint]
         else:
             qlist = [endpoint, 50, 100 - endpoint]
-
+        
         for plotter in self.plotters.values():
             for y, rope_var, values, color in plotter.treeplot(qlist, credible_interval):
                 if isinstance(rope, dict):
